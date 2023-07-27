@@ -1,24 +1,12 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { useCreateReducer } from '@/hooks/useCreateReducer';
-
-import { savePrompts } from '@/utils/app/prompts';
-
-import { OpenAIModels } from '@/types/openai';
-import { Prompt } from '@/types/prompt';
-
 import HomeContext from '@/pages/api/home/home.context';
 
 import logo from '../../public/images/harder-better-faster-stronger.png';
-import PromptbarContext from '../Promptbar/PromptBar.context';
-import {
-  PromptbarInitialState,
-  initialState,
-} from '../Promptbar/Promptbar.state';
 import Search from '../Search';
 
 import { useUser } from '@auth0/nextjs-auth0/client';
@@ -26,47 +14,15 @@ import { useUser } from '@auth0/nextjs-auth0/client';
 const Appbar = () => {
   const { t } = useTranslation('promptbar');
 
-  /**
-   * Multi-function Search input
-   *
-   */
-  const promptBarContextValue = useCreateReducer<PromptbarInitialState>({
-    initialState,
-  });
-
   const {
-    state: { prompts, defaultModelId, showPromptbar },
+    state: { appSearchTerm },
     dispatch: homeDispatch,
-    handleCreateFolder,
   } = useContext(HomeContext);
 
-  const {
-    state: { searchTerm, filteredPrompts },
-    dispatch: promptDispatch,
-  } = promptBarContextValue;
-
-  const handleSearchTerm = (searchTerm: string) => {
-    // chatDispatch({ field: 'searchTerm', value: searchTerm })
+  const handleSearchTerm = (value: string) => {
+    console.log({ appSearchTerm });
+    homeDispatch({ field: 'appSearchTerm', value });
   };
-
-  // useEffect(() => {
-  //   if (searchTerm) {
-  //     promptDispatch({
-  //       field: 'filteredPrompts',
-  //       value: prompts.filter((prompt) => {
-  //         const searchable =
-  //           prompt.name.toLowerCase() +
-  //           ' ' +
-  //           prompt.description.toLowerCase() +
-  //           ' ' +
-  //           prompt.content.toLowerCase();
-  //         return searchable.includes(searchTerm.toLowerCase());
-  //       }),
-  //     });
-  //   } else {
-  //     promptDispatch({ field: 'filteredPrompts', value: prompts });
-  //   }
-  // }, [searchTerm, prompts]);
 
   /**
    * Auth0 and User Dropdown
@@ -118,7 +74,7 @@ const Appbar = () => {
           <div className="w-[100%] xl:w-[40%] ">
             <Search
               placeholder={t('Search Prompts & Conversations...') || ''}
-              searchTerm={searchTerm}
+              searchTerm={appSearchTerm}
               onSearch={handleSearchTerm}
             />
           </div>

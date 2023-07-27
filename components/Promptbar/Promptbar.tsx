@@ -28,7 +28,7 @@ const Promptbar = () => {
   });
 
   const {
-    state: { prompts, defaultModelId, showPromptbar },
+    state: { prompts, defaultModelId, showPromptbar, appSearchTerm },
     dispatch: homeDispatch,
     handleCreateFolder,
     handleCreatePrompt,
@@ -60,6 +60,12 @@ const Promptbar = () => {
       e.target.style.background = 'none';
     }
   };
+
+  // A bit hacky: I am bouncing `appSearchTerm` to promptbar.context like this
+  // because I don't have the confidence right now to rearrange the providers.
+  useEffect(() => {
+    promptDispatch({ field: 'searchTerm', value: appSearchTerm });
+  }, [appSearchTerm, promptDispatch]);
 
   useEffect(() => {
     if (searchTerm) {

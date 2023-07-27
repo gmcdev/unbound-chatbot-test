@@ -71,6 +71,7 @@ const Home = ({
       selectedConversation,
       prompts,
       temperature,
+      appSearchTerm,
     },
     dispatch,
   } = contextValue;

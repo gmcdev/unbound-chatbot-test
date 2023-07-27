@@ -34,7 +34,14 @@ export const Chatbar = () => {
   });
 
   const {
-    state: { conversations, showChatbar, defaultModelId, folders, pluginKeys },
+    state: {
+      conversations,
+      showChatbar,
+      defaultModelId,
+      folders,
+      pluginKeys,
+      appSearchTerm,
+    },
     dispatch: homeDispatch,
     handleCreateFolder,
     handleNewConversation,
@@ -186,6 +193,12 @@ export const Chatbar = () => {
     }
   };
 
+  // A bit hacky: I am bouncing `appSearchTerm` to chatbar.context like this
+  // because I don't have the confidence right now to rearrange the providers.
+  useEffect(() => {
+    chatDispatch({ field: 'searchTerm', value: appSearchTerm });
+  }, [appSearchTerm, chatDispatch]);
+
   useEffect(() => {
     if (searchTerm) {
       chatDispatch({
@@ -204,7 +217,7 @@ export const Chatbar = () => {
         value: conversations,
       });
     }
-  }, [searchTerm, conversations]);
+  }, [searchTerm, conversations, chatDispatch]);
 
   return (
     <ChatbarContext.Provider
