@@ -5,6 +5,7 @@ import { GetServerSideProps } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import Head from 'next/head';
+import { useRouter } from 'next/router';
 
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
@@ -40,6 +41,7 @@ import Promptbar from '@/components/Promptbar';
 import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
+import { useUser } from '@auth0/nextjs-auth0/client';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Props {
@@ -92,6 +94,16 @@ const Home = ({
     },
     { enabled: true, refetchOnMount: false },
   );
+
+  // USER ----------------------------------------------
+  const { user } = useUser();
+  useEffect(() => {
+    if (!user) {
+      console.log('redirect');
+      // maybe go to login page
+      // router.push('/api/auth/login')
+    }
+  }, [user]);
 
   useEffect(() => {
     if (data) dispatch({ field: 'models', value: data });
@@ -222,7 +234,6 @@ const Home = ({
       updatedConversation,
       conversations,
     );
-    console.log({ single, all });
 
     dispatch({ field: 'selectedConversation', value: single });
     dispatch({ field: 'conversations', value: all });

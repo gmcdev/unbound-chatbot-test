@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import HomeContext from '@/pages/api/home/home.context';
 
@@ -20,7 +21,6 @@ const Appbar = () => {
   } = useContext(HomeContext);
 
   const handleSearchTerm = (value: string) => {
-    console.log({ appSearchTerm });
     homeDispatch({ field: 'appSearchTerm', value });
   };
 
@@ -36,7 +36,6 @@ const Appbar = () => {
   useEffect(() => {
     const closeUserDropdown = (e: MouseEvent) => {
       if (!userDropdown) {
-        console.log('out');
         return;
       }
       if (
@@ -53,6 +52,12 @@ const Appbar = () => {
       window.removeEventListener('mouseup', closeUserDropdown);
     };
   }, [userDropdown, dropdownRef]);
+
+  // logout
+  const router = useRouter();
+  const handleLogout = () => {
+    router.push('/api/auth/logout');
+  };
 
   return (
     <nav className="bg-gray-900">
@@ -164,6 +169,7 @@ const Appbar = () => {
                 <a
                   href="#"
                   className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  onClick={handleLogout}
                 >
                   Sign out
                 </a>
