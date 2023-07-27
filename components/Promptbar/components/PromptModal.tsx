@@ -2,15 +2,33 @@ import { FC, KeyboardEvent, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'next-i18next';
 
+import { OpenAIModels, fallbackModelID } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
 
+import { v4 as uuidv4 } from 'uuid';
+
 interface Props {
-  prompt: Prompt;
+  prompt?: Prompt;
   onClose: () => void;
   onUpdatePrompt: (prompt: Prompt) => void;
 }
 
-export const PromptModal: FC<Props> = ({ prompt, onClose, onUpdatePrompt }) => {
+// WARN: Hack to enable the PromptModal to be potentially opened
+// from any ChatMessage after a Prompt is requested to be created
+const defaultPrompt = {
+  id: uuidv4(),
+  name: '',
+  description: '',
+  content: '',
+  model: OpenAIModels[fallbackModelID], // <-- TODO 'fallbackModeId' should be 'defaultModeId' from home.context getServersideProps
+  folderId: null,
+};
+
+export const PromptModal: FC<Props> = ({
+  prompt = defaultPrompt,
+  onClose,
+  onUpdatePrompt,
+}) => {
   const { t } = useTranslation('promptbar');
   const [name, setName] = useState(prompt.name);
   const [description, setDescription] = useState(prompt.description);

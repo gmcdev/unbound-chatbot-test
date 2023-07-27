@@ -5,6 +5,7 @@ import { ActionType } from '@/hooks/useCreateReducer';
 import { Conversation } from '@/types/chat';
 import { KeyValuePair } from '@/types/data';
 import { FolderType } from '@/types/folder';
+import { Prompt } from '@/types/prompt';
 
 import { HomeInitialState } from './home.state';
 
@@ -20,6 +21,9 @@ export interface HomeContextProps {
     conversation: Conversation,
     data: KeyValuePair,
   ) => void;
+  handleCreatePrompt: (content?: string) => Prompt | undefined;
+  handleDeletePrompt: (prompt: Prompt) => void;
+  handleUpdatePrompt: (prompt: Prompt) => void;
 }
 
 const HomeContext = createContext<HomeContextProps>(undefined!);

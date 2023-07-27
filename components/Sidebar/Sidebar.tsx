@@ -20,7 +20,7 @@ interface Props<T> {
   searchTerm: string;
   handleSearchTerm: (searchTerm: string) => void;
   toggleOpen: () => void;
-  handleCreateItem: () => void;
+  handleCreateItem: (content?: string) => void;
   handleCreateFolder: () => void;
   handleDrop: (e: any) => void;
 }

@@ -14,8 +14,11 @@ import { useTranslation } from 'next-i18next';
 import { updateConversation } from '@/utils/app/conversation';
 
 import { Message } from '@/types/chat';
+import { Prompt } from '@/types/prompt';
 
 import HomeContext from '@/pages/api/home/home.context';
+
+import { PromptModal } from '@/components/Promptbar/components/PromptModal';
 
 import { CodeBlock } from '../Markdown/CodeBlock';
 import { MemoizedReactMarkdown } from '../Markdown/MemoizedReactMarkdown';
@@ -41,6 +44,8 @@ export const ChatMessage: FC<Props> = memo(
         currentMessage,
         messageIsStreaming,
       },
+      handleCreatePrompt,
+      handleUpdatePrompt,
       dispatch: homeDispatch,
     } = useContext(HomeContext);
 
@@ -48,6 +53,8 @@ export const ChatMessage: FC<Props> = memo(
     const [isTyping, setIsTyping] = useState<boolean>(false);
     const [messageContent, setMessageContent] = useState(message.content);
     const [messagedCopied, setMessageCopied] = useState(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
+    const [prompt, setPrompt] = useState<Prompt | undefined>();
 
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -119,6 +126,22 @@ export const ChatMessage: FC<Props> = memo(
           setMessageCopied(false);
         }, 2000);
       });
+    };
+
+    // PROMPT CONTROL -----------------------------
+
+    const prepareMessageForCreatePrompt = () => {
+      const prompt = handleCreatePrompt(message.content);
+      if (prompt) {
+        setPrompt(prompt);
+        setShowModal(true);
+      }
+    };
+
+    const handleUpdate = (prompt: Prompt) => {
+      handleUpdatePrompt(prompt);
+      // TODO
+      // promptDispatch({ field: 'searchTerm', value: '' });
     };
 
     useEffect(() => {
@@ -217,7 +240,7 @@ export const ChatMessage: FC<Props> = memo(
                     </button>
                     <button
                       className="mx-2 invisible group-hover:visible focus:visible text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                      onClick={() => {}}
+                      onClick={prepareMessageForCreatePrompt}
                     >
                       <IconArrowBigRightLine size={20} />
                     </button>
@@ -310,7 +333,7 @@ export const ChatMessage: FC<Props> = memo(
                       </button>
                       <button
                         className="mx-2 invisible group-hover:visible focus:visible text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300"
-                        onClick={() => {}}
+                        onClick={prepareMessageForCreatePrompt}
                       >
                         <IconArrowBigRightLine size={20} />
                       </button>
@@ -321,6 +344,13 @@ export const ChatMessage: FC<Props> = memo(
             )}
           </div>
         </div>
+        {showModal && (
+          <PromptModal
+            prompt={prompt}
+            onClose={() => setShowModal(false)}
+            onUpdatePrompt={handleUpdate}
+          />
+        )}
       </div>
     );
   },

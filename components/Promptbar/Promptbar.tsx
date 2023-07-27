@@ -31,6 +31,9 @@ const Promptbar = () => {
     state: { prompts, defaultModelId, showPromptbar },
     dispatch: homeDispatch,
     handleCreateFolder,
+    handleCreatePrompt,
+    handleDeletePrompt,
+    handleUpdatePrompt,
   } = useContext(HomeContext);
 
   const {
@@ -41,45 +44,6 @@ const Promptbar = () => {
   const handleTogglePromptbar = () => {
     homeDispatch({ field: 'showPromptbar', value: !showPromptbar });
     localStorage.setItem('showPromptbar', JSON.stringify(!showPromptbar));
-  };
-
-  const handleCreatePrompt = () => {
-    if (defaultModelId) {
-      const newPrompt: Prompt = {
-        id: uuidv4(),
-        name: `Prompt ${prompts.length + 1}`,
-        description: '',
-        content: '',
-        model: OpenAIModels[defaultModelId],
-        folderId: null,
-      };
-
-      const updatedPrompts = [...prompts, newPrompt];
-
-      homeDispatch({ field: 'prompts', value: updatedPrompts });
-
-      savePrompts(updatedPrompts);
-    }
-  };
-
-  const handleDeletePrompt = (prompt: Prompt) => {
-    const updatedPrompts = prompts.filter((p) => p.id !== prompt.id);
-
-    homeDispatch({ field: 'prompts', value: updatedPrompts });
-    savePrompts(updatedPrompts);
-  };
-
-  const handleUpdatePrompt = (prompt: Prompt) => {
-    const updatedPrompts = prompts.map((p) => {
-      if (p.id === prompt.id) {
-        return prompt;
-      }
-
-      return p;
-    });
-    homeDispatch({ field: 'prompts', value: updatedPrompts });
-
-    savePrompts(updatedPrompts);
   };
 
   const handleDrop = (e: any) => {

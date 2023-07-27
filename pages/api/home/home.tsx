@@ -221,9 +221,53 @@ const Home = ({
       updatedConversation,
       conversations,
     );
+    console.log({ single, all });
 
     dispatch({ field: 'selectedConversation', value: single });
     dispatch({ field: 'conversations', value: all });
+  };
+
+  // PROMPT OPERATIONS --------------------------------------------
+
+  const handleCreatePrompt = (content?: string): Prompt | undefined => {
+    if (defaultModelId) {
+      const newPrompt: Prompt = {
+        id: uuidv4(),
+        name: `Prompt ${prompts.length + 1}`,
+        description: '',
+        content: content || '',
+        model: OpenAIModels[defaultModelId],
+        folderId: null,
+      };
+
+      const updatedPrompts = [...prompts, newPrompt];
+
+      dispatch({ field: 'prompts', value: updatedPrompts });
+
+      savePrompts(updatedPrompts);
+
+      return newPrompt;
+    }
+  };
+
+  const handleDeletePrompt = (prompt: Prompt) => {
+    const updatedPrompts = prompts.filter((p) => p.id !== prompt.id);
+
+    dispatch({ field: 'prompts', value: updatedPrompts });
+    savePrompts(updatedPrompts);
+  };
+
+  const handleUpdatePrompt = (prompt: Prompt) => {
+    const updatedPrompts = prompts.map((p) => {
+      if (p.id === prompt.id) {
+        return prompt;
+      }
+
+      return p;
+    });
+    dispatch({ field: 'prompts', value: updatedPrompts });
+
+    savePrompts(updatedPrompts);
   };
 
   // EFFECTS  --------------------------------------------
@@ -358,6 +402,9 @@ const Home = ({
         handleUpdateFolder,
         handleSelectConversation,
         handleUpdateConversation,
+        handleCreatePrompt,
+        handleDeletePrompt,
+        handleUpdatePrompt,
       }}
     >
       <Head>
