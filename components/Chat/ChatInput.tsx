@@ -19,12 +19,15 @@ import {
 
 import { useTranslation } from 'next-i18next';
 
+import { useCreateReducer } from '@/hooks/useCreateReducer';
+
 import { Message } from '@/types/chat';
 import { Plugin } from '@/types/plugin';
 import { Prompt } from '@/types/prompt';
 
 import HomeContext from '@/pages/api/home/home.context';
 
+import { ChatbarInitialState, initialState } from '../Chatbar/Chatbar.state';
 import { PluginSelect } from './PluginSelect';
 import { PromptList } from './PromptList';
 import { VariableModal } from './VariableModal';
@@ -48,11 +51,20 @@ export const ChatInput = ({
 }: Props) => {
   const { t } = useTranslation('chat');
 
+  const chatBarContextValue = useCreateReducer<ChatbarInitialState>({
+    initialState,
+  });
+
   const {
     state: { selectedConversation, messageIsStreaming, prompts },
-
     dispatch: homeDispatch,
+    handleNewConversation,
   } = useContext(HomeContext);
+
+  const {
+    state: { searchTerm, filteredConversations },
+    dispatch: chatDispatch,
+  } = chatBarContextValue;
 
   const [content, setContent] = useState<string>();
   const [isTyping, setIsTyping] = useState<boolean>(false);
@@ -86,6 +98,10 @@ export const ChatInput = ({
 
     setContent(value);
     updatePromptListVisibility(value);
+  };
+
+  const handleSearchTerm = (searchTerm: string) => {
+    chatDispatch({ field: 'searchTerm', value: searchTerm });
   };
 
   const handleSend = () => {
@@ -391,7 +407,15 @@ export const ChatInput = ({
             // }}
           >
             <IconPlus size={16} />
-            <div className="hidden md:block">{t('New chat')}</div>
+            <div
+              className="hidden md:block"
+              onClick={() => {
+                handleNewConversation();
+                handleSearchTerm('');
+              }}
+            >
+              {t('New chat')}
+            </div>
           </button>
         </div>
       </div>
