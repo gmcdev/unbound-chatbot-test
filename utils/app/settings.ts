@@ -1,4 +1,7 @@
+import { setAppSettings } from '@/utils/firestore/app-settings';
+
 import { Settings } from '@/types/settings';
+import { User } from '@/types/user';
 
 const STORAGE_KEY = 'settings';
 
@@ -18,6 +21,9 @@ export const getSettings = (): Settings => {
   return settings;
 };
 
-export const saveSettings = (settings: Settings) => {
+export const saveSettings = (user: User | undefined, settings: Settings) => {
+  if (user) {
+    setAppSettings(user, { ...user.appSettings, ...settings });
+  }
   localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
 };

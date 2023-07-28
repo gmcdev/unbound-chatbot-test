@@ -53,6 +53,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
       modelError,
       loading,
       prompts,
+      user,
     },
     handleUpdateConversation,
     dispatch: homeDispatch,
@@ -197,7 +198,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               });
             }
           }
-          saveConversation(updatedConversation);
+          saveConversation(user, updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
               if (conversation.id === selectedConversation.id) {
@@ -210,7 +211,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             updatedConversations.push(updatedConversation);
           }
           homeDispatch({ field: 'conversations', value: updatedConversations });
-          saveConversations(updatedConversations);
+          saveConversations(user, updatedConversations);
           homeDispatch({ field: 'messageIsStreaming', value: false });
         } else {
           const { answer } = await response.json();
@@ -226,7 +227,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             field: 'selectedConversation',
             value: updateConversation,
           });
-          saveConversation(updatedConversation);
+          saveConversation(user, updatedConversation);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
               if (conversation.id === selectedConversation.id) {
@@ -239,7 +240,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             updatedConversations.push(updatedConversation);
           }
           homeDispatch({ field: 'conversations', value: updatedConversations });
-          saveConversations(updatedConversations);
+          saveConversations(user, updatedConversations);
           homeDispatch({ field: 'loading', value: false });
           homeDispatch({ field: 'messageIsStreaming', value: false });
         }

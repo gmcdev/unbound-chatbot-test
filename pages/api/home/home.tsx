@@ -128,7 +128,7 @@ const Home = ({
       value: conversation,
     });
 
-    saveConversation(conversation);
+    saveConversation(user, conversation);
   };
 
   // FOLDER OPERATIONS  --------------------------------------------
@@ -163,7 +163,7 @@ const Home = ({
     });
 
     dispatch({ field: 'conversations', value: updatedConversations });
-    saveConversations(updatedConversations);
+    saveConversations(user, updatedConversations);
 
     const updatedPrompts: Prompt[] = prompts.map((p) => {
       if (p.folderId === folderId) {
@@ -177,7 +177,7 @@ const Home = ({
     });
 
     dispatch({ field: 'prompts', value: updatedPrompts });
-    savePrompts(updatedPrompts);
+    savePrompts(user, updatedPrompts);
   };
 
   const handleUpdateFolder = (folderId: string, name: string) => {
@@ -222,8 +222,8 @@ const Home = ({
     dispatch({ field: 'selectedConversation', value: newConversation });
     dispatch({ field: 'conversations', value: updatedConversations });
 
-    saveConversation(newConversation);
-    saveConversations(updatedConversations);
+    saveConversation(user, newConversation);
+    saveConversations(user, updatedConversations);
 
     dispatch({ field: 'loading', value: false });
   };
@@ -238,6 +238,7 @@ const Home = ({
     };
 
     const { single, all } = updateConversation(
+      user,
       updatedConversation,
       conversations,
     );
@@ -263,7 +264,7 @@ const Home = ({
 
       dispatch({ field: 'prompts', value: updatedPrompts });
 
-      savePrompts(updatedPrompts);
+      savePrompts(user, updatedPrompts);
 
       return newPrompt;
     }
@@ -273,7 +274,7 @@ const Home = ({
     const updatedPrompts = prompts.filter((p) => p.id !== prompt.id);
 
     dispatch({ field: 'prompts', value: updatedPrompts });
-    savePrompts(updatedPrompts);
+    savePrompts(user, updatedPrompts);
   };
 
   const handleUpdatePrompt = (prompt: Prompt) => {
@@ -286,7 +287,7 @@ const Home = ({
     });
     dispatch({ field: 'prompts', value: updatedPrompts });
 
-    savePrompts(updatedPrompts);
+    savePrompts(user, updatedPrompts);
   };
 
   // EFFECTS  --------------------------------------------

@@ -1,6 +1,14 @@
-import { Prompt } from '@/types/prompt';
+import { setPrompts } from '@/utils/firestore/prompts';
 
-export const updatePrompt = (updatedPrompt: Prompt, allPrompts: Prompt[]) => {
+import { Prompt } from '@/types/prompt';
+import { User } from '@/types/user';
+
+// TODO, why isn't this being called fromm anywhere?
+export const updatePrompt = (
+  user: User,
+  updatedPrompt: Prompt,
+  allPrompts: Prompt[],
+) => {
   const updatedPrompts = allPrompts.map((c) => {
     if (c.id === updatedPrompt.id) {
       return updatedPrompt;
@@ -9,7 +17,7 @@ export const updatePrompt = (updatedPrompt: Prompt, allPrompts: Prompt[]) => {
     return c;
   });
 
-  savePrompts(updatedPrompts);
+  savePrompts(user, updatedPrompts);
 
   return {
     single: updatedPrompt,
@@ -17,6 +25,9 @@ export const updatePrompt = (updatedPrompt: Prompt, allPrompts: Prompt[]) => {
   };
 };
 
-export const savePrompts = (prompts: Prompt[]) => {
+export const savePrompts = (user: User, prompts: Prompt[]) => {
+  if (user) {
+    setPrompts(user, prompts);
+  }
   localStorage.setItem('prompts', JSON.stringify(prompts));
 };

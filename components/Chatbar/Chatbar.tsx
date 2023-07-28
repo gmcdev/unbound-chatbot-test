@@ -8,6 +8,7 @@ import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
 import { saveConversation, saveConversations } from '@/utils/app/conversation';
 import { saveFolders } from '@/utils/app/folders';
 import { exportData, importData } from '@/utils/app/importExport';
+import { setAppSettings } from '@/utils/firestore/app-settings';
 
 import { Conversation } from '@/types/chat';
 import { LatestExportFormat, SupportedExportFormats } from '@/types/export';
@@ -41,6 +42,7 @@ export const Chatbar = () => {
       folders,
       pluginKeys,
       appSearchTerm,
+      user,
     },
     dispatch: homeDispatch,
     handleCreateFolder,
@@ -151,7 +153,7 @@ export const Chatbar = () => {
 
     homeDispatch({ field: 'conversations', value: updatedConversations });
     chatDispatch({ field: 'searchTerm', value: '' });
-    saveConversations(updatedConversations);
+    saveConversations(user, updatedConversations);
 
     if (updatedConversations.length > 0) {
       homeDispatch({
@@ -159,7 +161,10 @@ export const Chatbar = () => {
         value: updatedConversations[updatedConversations.length - 1],
       });
 
-      saveConversation(updatedConversations[updatedConversations.length - 1]);
+      saveConversation(
+        user,
+        updatedConversations[updatedConversations.length - 1],
+      );
     } else {
       defaultModelId &&
         homeDispatch({
@@ -180,8 +185,15 @@ export const Chatbar = () => {
   };
 
   const handleToggleChatbar = () => {
-    homeDispatch({ field: 'showChatbar', value: !showChatbar });
-    localStorage.setItem('showChatbar', JSON.stringify(!showChatbar));
+    const nextShowChatbar = !showChatbar;
+    homeDispatch({ field: 'showChatbar', value: nextShowChatbar });
+    if (user) {
+      setAppSettings(user, {
+        ...user.appSettings,
+        showChatbar: nextShowChatbar,
+      });
+    }
+    localStorage.setItem('showChatbar', JSON.stringify(nextShowChatbar));
   };
 
   const handleDrop = (e: any) => {

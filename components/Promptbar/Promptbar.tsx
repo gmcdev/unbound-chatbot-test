@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
 import { savePrompts } from '@/utils/app/prompts';
+import { setAppSettings } from '@/utils/firestore/app-settings';
 
 import { OpenAIModels } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
@@ -28,7 +29,7 @@ const Promptbar = () => {
   });
 
   const {
-    state: { prompts, defaultModelId, showPromptbar, appSearchTerm },
+    state: { prompts, defaultModelId, showPromptbar, appSearchTerm, user },
     dispatch: homeDispatch,
     handleCreateFolder,
     handleCreatePrompt,
@@ -42,8 +43,15 @@ const Promptbar = () => {
   } = promptBarContextValue;
 
   const handleTogglePromptbar = () => {
-    homeDispatch({ field: 'showPromptbar', value: !showPromptbar });
-    localStorage.setItem('showPromptbar', JSON.stringify(!showPromptbar));
+    const nextShowPromptbar = !showPromptbar;
+    homeDispatch({ field: 'showPromptbar', value: nextShowPromptbar });
+    if (user) {
+      setAppSettings(user, {
+        ...user.appSettings,
+        showPromptbar: nextShowPromptbar,
+      });
+    }
+    localStorage.setItem('showPromptbar', JSON.stringify(nextShowPromptbar));
   };
 
   const handleDrop = (e: any) => {

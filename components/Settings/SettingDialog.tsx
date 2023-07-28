@@ -21,7 +21,10 @@ export const SettingDialog: FC<Props> = ({ open, onClose }) => {
   const { state, dispatch } = useCreateReducer<Settings>({
     initialState: settings,
   });
-  const { dispatch: homeDispatch } = useContext(HomeContext);
+  const {
+    state: { user },
+    dispatch: homeDispatch,
+  } = useContext(HomeContext);
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -45,7 +48,7 @@ export const SettingDialog: FC<Props> = ({ open, onClose }) => {
 
   const handleSave = () => {
     homeDispatch({ field: 'lightMode', value: state.theme });
-    saveSettings(state);
+    saveSettings(user, state);
   };
 
   // Render nothing if the dialog is not open.

@@ -17,6 +17,9 @@ const createCollection = <T = DocumentData>(collectionName: string) => {
 
 // create our collections
 export const usersCollection = createCollection<User>('users');
-export const conversationsCollection =
-  createCollection<Conversation>('conversations');
-export const promptsCollection = createCollection<Prompt>('prompts');
+
+// TODO save these as subcollections of users
+//
+// export const conversationsCollection =
+//   createCollection<Conversation>('conversations');
+// export const promptsCollection = createCollection<Prompt>('prompts');

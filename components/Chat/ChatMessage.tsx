@@ -43,6 +43,7 @@ export const ChatMessage: FC<Props> = memo(
         conversations,
         currentMessage,
         messageIsStreaming,
+        user,
       },
       handleCreatePrompt,
       handleUpdatePrompt,
@@ -103,6 +104,7 @@ export const ChatMessage: FC<Props> = memo(
       };
 
       const { single, all } = updateConversation(
+        user,
         updatedConversation,
         conversations,
       );
