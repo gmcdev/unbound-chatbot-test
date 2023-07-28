@@ -41,6 +41,7 @@ import Promptbar from '@/components/Promptbar';
 import HomeContext from './home.context';
 import { HomeInitialState, initialState } from './home.state';
 
+import { withPageAuthRequired } from '@auth0/nextjs-auth0/client';
 import { useUser } from '@auth0/nextjs-auth0/client';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -452,7 +453,7 @@ const Home = ({
     </HomeContext.Provider>
   );
 };
-export default Home;
+export default withPageAuthRequired(Home);
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   const defaultModelId =
