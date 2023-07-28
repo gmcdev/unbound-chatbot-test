@@ -401,21 +401,13 @@ export const ChatInput = ({
 
           <button
             className="text-black flex w-auto md:w-[145px] w-fit items-center gap-3 rounded border border-neutral-200 bg-white py-2 px-2 text-black hover:opacity-50 dark:border-neutral-600 dark:bg-[#343541] dark:text-white"
-            // onClick={() => {
-            //   handleCreateItem();
-            //   handleSearchTerm('');
-            // }}
+            onClick={() => {
+              handleNewConversation();
+              handleSearchTerm('');
+            }}
           >
             <IconPlus size={16} />
-            <div
-              className="hidden md:block"
-              onClick={() => {
-                handleNewConversation();
-                handleSearchTerm('');
-              }}
-            >
-              {t('New chat')}
-            </div>
+            <div className="hidden md:block">{t('New chat')}</div>
           </button>
         </div>
       </div>

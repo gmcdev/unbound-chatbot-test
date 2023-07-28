@@ -438,7 +438,7 @@ const Home = ({
               />
             </div>
 
-            <div className=" top-[54px] w-full h-full flex pt-[48px] sm:pt-0">
+            <div className=" top-[54px] w-full h-full flex sm:pt-0">
               <Chatbar />
 
               <div className="flex flex-1">

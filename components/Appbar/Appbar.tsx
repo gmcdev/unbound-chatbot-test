@@ -67,8 +67,11 @@ const Appbar = () => {
 
   return (
     <nav className="bg-gray-900">
-      <div className="max-w-full flex flex-wrap items-center justify-between pt-1">
-        <a href="#" className="flex items-center w-[20%] lg:w-[260px] pl-5">
+      <div className="max-w-full max-h-[60px] flex flex-nowrap  items-center justify-between pt-1">
+        <a
+          href="#"
+          className="flex items-center w-[20%] lg:w-[260px] pl-1 md:pl-5"
+        >
           <Image
             src={logo}
             width={60}
