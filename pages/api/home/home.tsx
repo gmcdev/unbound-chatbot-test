@@ -95,16 +95,6 @@ const Home = ({
     { enabled: true, refetchOnMount: false },
   );
 
-  // USER ----------------------------------------------
-  const { user } = useUser();
-  useEffect(() => {
-    if (!user) {
-      console.log('redirect');
-      // maybe go to login page
-      // router.push('/api/auth/login')
-    }
-  }, [user]);
-
   useEffect(() => {
     if (data) dispatch({ field: 'models', value: data });
   }, [data, dispatch]);

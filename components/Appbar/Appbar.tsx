@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 
 import HomeContext from '@/pages/api/home/home.context';
 
+import { updateUser } from '../../firestore/updateUser.js';
 import logo from '../../public/images/harder-better-faster-stronger.png';
 import Search from '../Search';
 
@@ -29,6 +30,11 @@ const Appbar = () => {
    *
    */
   const { user, error, isLoading } = useUser();
+  useEffect(() => {
+    if (user) {
+      updateUser(user);
+    }
+  }, [user]);
 
   // User dropdown
   const [userDropdown, setUserDropdown] = useState(false);
