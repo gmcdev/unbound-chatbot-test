@@ -1,10 +1,14 @@
-// import config from '../gcloud-service-account.json';
 import { getApp, getApps, initializeApp } from 'firebase/app';
 
-const config = {
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-  privateKey: process.env.FIREBASE_PRIVATE_KEY,
-};
-const app = !getApps().length ? initializeApp(config) : getApp();
+/**
+ * TODO:
+ *
+ * Better understand how to securely authenticate
+ * a public client with Firebase.
+ *
+ */
+const envConfig = JSON.parse(process.env.NEXT_PUBLIC_GCLOUD_SERVICE_ACCOUNT);
+
+const app = !getApps().length ? initializeApp(envConfig) : getApp();
+
 export default app;
