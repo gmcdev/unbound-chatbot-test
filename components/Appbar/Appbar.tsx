@@ -5,6 +5,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
+import { purgeAppState } from '@/utils/app/manager';
+
 import HomeContext from '@/pages/api/home/home.context';
 
 import logo from '../../public/images/harder-better-faster-stronger.png';
@@ -51,6 +53,7 @@ const Appbar = () => {
   // logout
   const router = useRouter();
   const handleLogout = () => {
+    purgeAppState();
     router.push('/api/auth/logout');
   };
 

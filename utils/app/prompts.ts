@@ -25,7 +25,7 @@ export const updatePrompt = (
   };
 };
 
-export const savePrompts = (user: User, prompts: Prompt[]) => {
+export const savePrompts = (user: User | undefined, prompts: Prompt[]) => {
   if (user) {
     setPrompts(user, prompts);
   }

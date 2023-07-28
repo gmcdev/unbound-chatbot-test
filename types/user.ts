@@ -2,6 +2,8 @@ import { Conversation } from '@/types/chat';
 import { Prompt } from '@/types/prompt';
 import { Settings } from '@/types/settings';
 
+import { FolderInterface } from './folder';
+
 import { UserProfile } from '@auth0/nextjs-auth0/client';
 
 export interface AppSettings extends Settings {
@@ -15,4 +17,5 @@ export interface User {
   appSettings: AppSettings;
   conversations: Conversation[];
   prompts: Prompt[];
+  folders: FolderInterface[];
 }
