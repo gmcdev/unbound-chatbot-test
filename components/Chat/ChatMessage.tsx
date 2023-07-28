@@ -137,6 +137,7 @@ export const ChatMessage: FC<Props> = memo(
       if (prompt) {
         setPrompt(prompt);
         setShowModal(true);
+        homeDispatch({ field: 'showPromptbar', value: true });
       }
     };
 

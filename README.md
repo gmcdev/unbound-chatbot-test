@@ -1,3 +1,51 @@
+# Unbound ML: Chatbot Test
+
+## ChangeLog
+
+### Adds authentication
+
+I opted for `auth0`. Wanted a fully managed solution that would provide users the ability to login with any existing email or social account.
+
+I haven't used Auth0's User Management Admin, but it appears to have all the features you'd expect, including grouping by Organization, setting Roles, and visibility into their auth actions.
+
+### Persistence
+
+Here I opted for `Firestore`, because that's the cloud NoSQL solution I'm most familiar with. I wanted cloud NoSQL because it would be the easiest to manage directly from the client-side. And NoSQL would make it easy to key everything off the user-id. As well, the data organization would be 1:1 with the existing LocalStorage document format.
+
+### Hosting
+
+And here I went with Netlify because Vercel has a super aggressive spam-protection on their login page, apparently, and I was blocked on my first attempt to sign up.
+
+Other options, since I'm already using Firestore would be to host on GCP, but their support for NextJS didn't look as turn-key as Netlify's.
+
+### Welcome Page
+
+For non-logged in users.
+
+### User/session Management
+
+This top-bar on the application gave me an opportunity to add the required "User"/session interface.
+
+### Global Search
+
+Additionally, I found the "Dual Search" functionality to be annoying at best. Instead, a "Global Search" was added that is wired to filter both Conversations and Prompts simultaneously.
+
+### Branding
+
+Then, of course: Hard, Better, Faster, Stronger BRANDING!
+
+### Managing Conversations / Prompts
+
+I also found it awkward to go to the (possibly hidden) sidebars to click either "New Chat" or "New Prompt". Since the whole experience is about this interaction with AI, I did a few things to allow user's to stay focused on the main window:
+
+###### New Chat
+
+Add a "New Chat" button right of the main Input. This way, if your conversation is starting to veer away from its original topic, or you want to delineate prior content from GPT's input, then, even if you have already started typing, you can click "+ Chat" and it will bounce you into a new Conversation.
+
+###### New Prompt
+
+Similarly, the "New Prompt" button was such a confusing drag. You click it, it creates a Prompt...then what? You have to click that, then figure out what to do with the Modal. THEN WHAT? Then you have to remember the secret "/" way to pull the prompt into a conversation. Or open the Modal and copy the prompt manually. Blech. So, now you there is a "-->" button next to every content-entry. If you click that, it will save that as a prompt and automatically open the Modal, in case you'd like to apply a more unique Name to it.
+
 # Chatbot UI
 
 Chatbot UI is an open source chat UI for AI models.
