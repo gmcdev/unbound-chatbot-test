@@ -23,14 +23,17 @@ import {
   updateConversation,
 } from '@/utils/app/conversation';
 import { saveFolders } from '@/utils/app/folders';
+import { applyAppState } from '@/utils/app/manager';
 import { savePrompts } from '@/utils/app/prompts';
 import { getSettings } from '@/utils/app/settings';
+import { updateUserProfile } from '@/utils/firestore/user';
 
 import { Conversation } from '@/types/chat';
 import { KeyValuePair } from '@/types/data';
 import { FolderInterface, FolderType } from '@/types/folder';
 import { OpenAIModelID, OpenAIModels, fallbackModelID } from '@/types/openai';
 import { Prompt } from '@/types/prompt';
+import { User } from '@/types/user';
 
 import Appbar from '@/components/Appbar';
 import { Chat } from '@/components/Chat/Chat';
@@ -73,8 +76,7 @@ const Home = ({
       conversations,
       selectedConversation,
       prompts,
-      temperature,
-      appSearchTerm,
+      user,
     },
     dispatch,
   } = contextValue;
@@ -95,6 +97,20 @@ const Home = ({
     },
     { enabled: true, refetchOnMount: false },
   );
+
+  // USER -----------------------------------------------------
+
+  const { user: auth0User } = useUser();
+  useEffect(() => {
+    (async () => {
+      if (auth0User) {
+        const user = await updateUserProfile(auth0User);
+        console.log({ user });
+        dispatch({ field: 'user', value: user });
+        // applyAppState(user.appSettings);
+      }
+    })();
+  }, [auth0User, dispatch]);
 
   useEffect(() => {
     if (data) dispatch({ field: 'models', value: data });

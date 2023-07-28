@@ -7,7 +7,6 @@ import { useRouter } from 'next/router';
 
 import HomeContext from '@/pages/api/home/home.context';
 
-import { updateUser } from '../../firestore/updateUser.js';
 import logo from '../../public/images/harder-better-faster-stronger.png';
 import Search from '../Search';
 
@@ -17,7 +16,7 @@ const Appbar = () => {
   const { t } = useTranslation('promptbar');
 
   const {
-    state: { appSearchTerm },
+    state: { appSearchTerm, user },
     dispatch: homeDispatch,
   } = useContext(HomeContext);
 
@@ -25,18 +24,8 @@ const Appbar = () => {
     homeDispatch({ field: 'appSearchTerm', value });
   };
 
-  /**
-   * Auth0 and User Dropdown
-   *
-   */
-  const { user, error, isLoading } = useUser();
-  useEffect(() => {
-    if (user) {
-      updateUser(user);
-    }
-  }, [user]);
+  // USER DROPDOWN -------------------------------------------------------------
 
-  // User dropdown
   const [userDropdown, setUserDropdown] = useState(false);
   const dropdownRef = useRef<any>(null);
   useEffect(() => {
@@ -131,61 +120,59 @@ const Appbar = () => {
           </div>
         </div>
 
-        <div className="flex flex-col items-end pr-[20px] text-sm w-[20%] lg:w-[260px]">
-          <button type="button" className="flex">
-            {user ? (
+        {user && (
+          <div className="flex flex-col items-end pr-[20px] text-sm w-[20%] lg:w-[260px]">
+            <button type="button" className="flex">
               <div
                 className="w-10 h-10 rounded-full bg-contain"
-                style={{ backgroundImage: `url(${user.picture})` }}
+                style={{ backgroundImage: `url(${user.userProfile.picture})` }}
                 onClick={() => setUserDropdown(!userDropdown)}
               />
-            ) : (
-              <Link href="/api/auth/login">Login</Link>
-            )}
-          </button>
-          <div
-            ref={dropdownRef}
-            className={`absolute top-[50px] right-[10px] ${
-              !userDropdown ? 'hidden' : ''
-            } z-50 text-base list-none bg-white dark:bg-zinc-700 divide-y divide-gray-100 rounded-lg shadow-md`}
-          >
-            <div className="px-4 py-3">
-              <span className="block text-sm text-gray-900 dark:text-white">
-                {user?.name}
-              </span>
-              <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
-                {user?.email}
-              </span>
+            </button>
+            <div
+              ref={dropdownRef}
+              className={`absolute top-[50px] right-[10px] ${
+                !userDropdown ? 'hidden' : ''
+              } z-50 text-base list-none bg-white dark:bg-zinc-700 divide-y divide-gray-100 rounded-lg shadow-md`}
+            >
+              <div className="px-4 py-3">
+                <span className="block text-sm text-gray-900 dark:text-white">
+                  {user.userProfile.name}
+                </span>
+                <span className="block text-sm  text-gray-500 truncate dark:text-gray-400">
+                  {user.userProfile.email}
+                </span>
+              </div>
+              <ul className="py-2">
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >
+                    Dashboard
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                  >
+                    Settings
+                  </a>
+                </li>
+                <li>
+                  <a
+                    href="#"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
+                    onClick={handleLogout}
+                  >
+                    Sign out
+                  </a>
+                </li>
+              </ul>
             </div>
-            <ul className="py-2">
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Dashboard
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                >
-                  Settings
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:text-gray-200 dark:hover:text-white"
-                  onClick={handleLogout}
-                >
-                  Sign out
-                </a>
-              </li>
-            </ul>
           </div>
-        </div>
+        )}
       </div>
     </nav>
   );
