@@ -144,7 +144,7 @@ const Appbar = () => {
             ref={dropdownRef}
             className={`absolute top-[50px] right-[10px] ${
               !userDropdown ? 'hidden' : ''
-            } z-50 text-base list-none bg-white divide-y divide-gray-100 rounded-lg shadow-md`}
+            } z-50 text-base list-none bg-white dark:bg-zinc-700 divide-y divide-gray-100 rounded-lg shadow-md`}
           >
             <div className="px-4 py-3">
               <span className="block text-sm text-gray-900 dark:text-white">

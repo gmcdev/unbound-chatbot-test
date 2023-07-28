@@ -7,5 +7,9 @@ const db = getFirestore(app);
 export async function updateUser(user) {
   console.log({ db, user });
   // does user exist
-  await setDoc(doc(db, 'users', user.sub), user);
+  try {
+    await setDoc(doc(db, 'users', user.sub), user);
+  } catch (e) {
+    console.log(e);
+  }
 }
